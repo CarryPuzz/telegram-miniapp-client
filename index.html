@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Бездепозитні Завдання</title>
+  <script>
+    const telegram_id = "test_user";
+    const backendUrl = "https://example-vercel-project.vercel.app";
+
+    async function loadBalance() {
+      const res = await fetch(`${backendUrl}/api/start`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ telegram_id }),
+      });
+      const data = await res.json();
+      document.getElementById("balance").innerText = data.balance.toFixed(2) + " $";
+    }
+
+    async function completeTask(taskId) {
+      const res = await fetch(`${backendUrl}/api/complete-task`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ telegram_id, task_id: taskId }),
+      });
+      const data = await res.json();
+      document.getElementById("balance").innerText = data.newBalance.toFixed(2) + " $";
+    }
+
+    window.onload = loadBalance;
+  </script>
+</head>
+<body>
+  <h1>Бездепозитні Завдання</h1>
+  <p>Ваш баланс: <span id="balance">0.00 $</span></p>
+  <button onclick="completeTask(1)">Виконати завдання (Встановити додаток)</button>
+</body>
+</html>
